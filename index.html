@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J'adore Sport – Excellence Sportive Absolue</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --------------------------
+           CONFIG GLOBALE & RESET
+        --------------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* On cache le curseur par défaut pour mettre le nôtre */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #050505;
+            color: #f0f0f0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded { opacity: 1; }
+
+        h1, h2, h3, h4, .section-title, .stat-number {
+            font-family: "Oswald", sans-serif; /* Police plus "Sport/Luxe" */
+        }
+
+        /* -----------------------
+           CURSOR CUSTOM (L'effet WOW)
+        ------------------------ */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff4d00;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Quand on survole un lien */
+        body.hovering .cursor-outline {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(255, 77, 0, 0.1);
+            border-color: #ff4d00;
+        }
+
+        @media (max-width: 900px) {
+            * { cursor: auto; }
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+
+        /* -----------------------
+           GRAIN TEXTURE (Effet Cinéma)
+        ------------------------ */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.05;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+        }
+
+        /* -----------------------
+           SCROLLBAR & TYPO
+        ------------------------ */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff4d00; }
+
+        .section {
+            padding: 140px 8%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: .6;
+            margin-bottom: 80px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            letter-spacing: 1px;
+        }
+
+        .highlight { color: #ff4d00; }
+
+        /* -----------------------
+           HEADER
+        ------------------------ */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .header.scrolled {
+            background: rgba(5, 5, 5, 0.8);
+            padding: 20px 8%;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: "Oswald", sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .nav a {
+            margin-left: 40px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: .3s;
+            position: relative;
+        }
+
+        .nav a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 1px;
+            background: #ff4d00;
+            transition: width .3s;
+            margin-top: 5px;
+        }
+
+        .nav a:hover { color: #fff; }
+        .nav a:hover::after { width: 100%; }
+
+        /* -----------------------
+           HERO SECTION
+        ------------------------ */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-attachment: fixed;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.2), rgba(5,5,5,1));
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+        }
+        
+        .hero-content-wrapper {
+             z-index: 11;
+             position: relative;
+             text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 50px;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        /* -----------------------
+           NOTRE HISTOIRE (About Us/History) - NOUVEAU
+        ------------------------ */
+        .histoire-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr; /* Image plus petite que le texte */
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .histoire-text h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .histoire-text p {
+            margin-bottom: 25px;
+            color: #ccc;
+        }
+
+        .histoire-img {
+            height: 500px;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1547844208-8e8477749eb3?q=80&w=600&auto=format&fit=crop') center/cover no-repeat;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            filter: grayscale(100%);
+            transition: filter 0.5s ease;
+        }
+
+        .histoire-img:hover {
+             filter: grayscale(0%);
+        }
+        
+        @media (max-width: 900px) {
+            .histoire-grid {
+                grid-template-columns: 1fr;
+            }
+            .histoire-img {
+                height: 300px;
+            }
+        }
+        /* FIN NOUVELLE SECTION HISTOIRE */
+
+        /* -----------------------
+           SECTION ABONNEMENTS (ACCÈS PRIVILÉGIÉ) - UNIFIÉ ET CORRIGÉ
+        ------------------------ */
+        
+        .membership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .plan-card {
+            background: #121212; /* Assure un fond sombre et visible */
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: .4s;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff4d00;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .plan-name { 
+            font-size: 2rem; 
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase; 
+            margin-bottom: 20px; 
+            opacity: 0.9; 
+        }
+        
+        .plan-features { 
+            list-style: none; 
+            margin-bottom: 30px; 
+            text-align: left; 
+            padding-left: 0;
+        }
+        .plan-features li { 
+            margin-bottom: 12px; 
+            color: #ccc; 
+            font-size: 1rem;
+            display: flex; 
+            align-items: flex-start;
+        }
+        .plan-features li::before { 
+            content: '✓'; 
+            color: #ff4d00; 
+            margin-right: 10px; 
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* DÉTAIL DES FORMATS DE TARIF PROFESSIONNEL */
+        .pricing-format-details {
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .format-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1.1rem;
+        }
+
+        .format-duration {
+            color: #f0f0f0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .format-price {
+            font-weight: 700;
+            color: #ff4d00;
+            font-size: 1.4rem;
+        }
+
+        .format-price small {
+            font-weight: 400;
+            opacity: 0.6;
+            font-size: 0.8rem;
+            margin-left: 5px;
+            color: #f0f0f0;
+        }
+
+        .format-option:last-child {
+            border-bottom: none;
+        }
+        /* Responsive pour la grille d'abonnements */
+        @media (max-width: 768px) {
+            .membership-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* FIN DES STYLES ABONNEMENTS */
+        
+        .cta-btn {
+            display: inline-block;
+            padding: 20px 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            transition: 0.4s;
+        }
+
+        .cta-btn:hover {
+            background: #ff4d00;
+            border-color: #ff4d00;
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* -----------------------
+           MARQUEE (Texte défilant)
+        ------------------------ */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: #ff4d00;
+            padding: 15px 0;
+            transform: rotate(-2deg) scale(1.05); /* Petite inclinaison stylée */
+            margin: 50px 0;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 20s linear infinite;
+        }
+
+        .marquee-content span {
+            font-family: "Oswald", sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000;
+            text-transform: uppercase;
+            padding: 0 40px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* -----------------------
+           SPORTS
+        ------------------------ */
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .sport-card {
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            group: cursor-pointer;
+        }
+
+        .sport-img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s ease;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .sport-card:hover .sport-img {
+            transform: scale(1.1);
+            filter: grayscale(0%) contrast(1);
+        }
+
+        .sport-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+        }
+
+        .sport-overlay h3 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            transform: translateY(20px);
+            transition: 0.4s;
+        }
+
+        .sport-overlay p {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.4s 0.1s;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .sport-card:hover h3, 
+        .sport-card:hover p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .img-muscu { background-image: url('https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=800&auto=format&fit=crop'); }
+        .img-foot { background-image: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=800&auto=format&fit=crop'); }
+        .img-boxe { background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800&auto=format&fit=crop'); }
+
+        /* -----------------------
+           STATS & COACHS
+        ------------------------ */
+        .stats { border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; background: #080808; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
+        .stat-number { font-size: 5rem; color: #fff; line-height: 1; }
+        .stat-label { color: #ff4d00; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-top: 10px; display: block;}
+
+        .coaches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .coach-card { text-align: center; }
+        .coach-avatar { height: 350px; width: 100%; object-fit: cover; filter: grayscale(100%); transition: .5s; margin-bottom: 20px; border-radius: 4px;}
+        .coach-card:hover .coach-avatar { filter: grayscale(0%); }
+        .coach-info h3 { font-size: 1.8rem; text-transform: uppercase; }
+        .coach-role { color: #ff4d00; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block;}
+
+        /* -----------------------
+           CONTACT & FOOTER
+        ------------------------ */
+        .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .contact-info h3 { font-size: 2rem; margin-bottom: 20px; }
+        .contact-info p { color: #888; margin-bottom: 30px; }
+        
+        input, textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            padding: 20px 0; color: #fff; font-size: 1.1rem; outline: none; transition: .3s; margin-bottom: 30px;
+        }
+        input:focus, textarea:focus { border-color: #ff4d00; }
+        
+        .footer { padding: 80px 8%; background: #020202; border-top: 1px solid #111; display: flex; justify-content: space-between; align-items: flex-end; }
+        .footer p { color: #444; font-size: 0.9rem; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 4rem; }
+            .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+            .header { padding: 20px; }
+            .nav { display: none; }
+            .section { padding: 100px 5%; }
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header class="header">
+        <div class="logo">J'ADORE <span class="highlight">SPORT</span></div>
+        <nav class="nav">
+            <a href="#accueil" class="hover-trigger">Accueil</a>
+            <a href="#histoire" class="hover-trigger">Notre Histoire</a> <a href="#sports" class="hover-trigger">Disciplines</a>
+            <a href="#membership" class="hover-trigger">Abonnements</a>
+            <a href="#coachs" class="hover-trigger">Coachs</a>
+            <a href="#contact" class="hover-trigger">Contact</a>
+        </nav>
+    </header>
+
+    <section id="accueil" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content-wrapper">
+            <div class="hero-content">
+                <h1>L'Art de la<br>Performance</h1>
+                <p>Ne vous contentez pas de participer. Dominez.</p>
+                <a class="cta-btn hover-trigger" href="#histoire">Entrer dans l'Arène</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span>Power</span><span>Discipline</span><span>Luxury</span><span>Performance</span><span>Elite</span><span>Victory</span>
+            <span>Power</span><span>Discipline</span><span>Luxury</span><span>Performance</span><span>Elite</span><span>Victory</span>
+        </div>
+    </div>
+
+    <section id="histoire" class="section">
+        <h2 class="section-title">Notre H<span class="highlight">istoire</span></h2>
+        <p class="section-subtitle">Plus qu'une salle, un héritage de la performance.</p>
+        
+        <div class="histoire-grid">
+            <div class="histoire-text">
+                <h3>Fondés sur la Rigueur, Forgés par l'Ambition.</h3>
+                <p>En 2008, J'ADORE SPORT est né de la volonté de créer un sanctuaire pour les athlètes qui refusent la médiocrité. Nous n'avons jamais cherché à être la plus grande salle, mais la plus exclusive. Notre philosophie repose sur trois piliers : la science du mouvement, l'excellence du coaching et l'intimité d'un club privé.</p>
+                <p>Chaque coin de notre établissement, de nos équipements de pointe à nos protocoles de récupération, est conçu pour l'optimisation maximale. Nous ne vendons pas d'abonnement ; nous offrons un accès à une méthodologie éprouvée pour transformer l'ambition en résultat. Rejoignez l'histoire des champions qui ont fait de J'ADORE SPORT leur point de départ.</p>
+                <a class="cta-btn hover-trigger" href="#contact" style="margin-top: 10px;">Devenir Membre</a>
+            </div>
+            <div class="histoire-img hover-trigger"></div>
+        </div>
+    </section>
+    <section id="sports" class="section">
+        <h2 class="section-title">Nos Disciplines</h2>
+        <p class="section-subtitle">L'élégance de l'effort.</p>
+        <div class="sports-grid">
+            <div class="sport-card hover-trigger">
+                <div class="sport-img img-muscu"></div>
+                <div class="sport-overlay">
+                    <h3>Musculation</h3>
+                    <p>Sculpture corporelle de haute précision.</p>
+                </div>
+            </div>
+            <div class="sport-card hover-trigger">
+                <div class="sport-img img-foot"></div>
+                <div class="sport-overlay">
+                    <h3>Football</h3>
+                    <p>Intelligence tactique et explosivité.</p>
+                </div>
+            </div>
+            <div class="sport-card hover-trigger">
+                <div class="sport-img img-boxe"></div>
+                <div class="sport-overlay">
+                    <h3>Boxe</h3>
+                    <p>Le noble art de la puissance contrôlée.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="membership" class="section" data-scroll-section>
+        <h2 class="section-title">Accès Privilégié</h2>
+        <p class="section-subtitle">Choisissez le niveau et la durée d'engagement qui correspondent à vos objectifs.</p>
+        
+        <div class="membership-grid">
+            
+            <div class="plan-card">
+                <div class="plan-name">Essentiel</div>
+                <ul class="plan-features">
+                    <li>Accès illimité aux installations</li>
+                    <li>Programme de base & Suivi digital</li>
+                </ul>
+                
+                <div class="pricing-format-details">
+                    <div class="format-option">
+                        <span class="format-duration">Mensuel</span>
+                        <span class="format-price">49€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration">Trimestriel (-8%)</span>
+                        <span class="format-price">45€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration" style="color:#ff4d00;">Annuel (-20%)</span>
+                        <span class="format-price">39€<small>/mois</small></span>
+                    </div>
+                </div>
+
+                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+            </div>
+            
+            <div class="plan-card" style="border-color: #ff4d00; background: #181818;">
+                <div class="plan-name" style="color:#ff4d00;">Elite</div>
+                <ul class="plan-features">
+                    <li>1 Coaching privé / mois inclus</li>
+                    <li>Nutrition personnalisée & Récupération Spa</li>
+                </ul>
+                
+                <div class="pricing-format-details">
+                    <div class="format-option">
+                        <span class="format-duration">Mensuel</span>
+                        <span class="format-price">99€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration">Trimestriel (-9%)</span>
+                        <span class="format-price">90€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration" style="color:#ff4d00;">Annuel (-20%)</span>
+                        <span class="format-price">79€<small>/mois</small></span>
+                    </div>
+                </div>
+
+                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+            </div>
+            
+            <div class="plan-card">
+                <div class="plan-name">Légende</div>
+                <ul class="plan-features">
+                    <li>Accès VIP 24/7 & Conciergerie Sportive</li>
+                    <li>Coaching Hebdomadaire & Suivi Biologique</li>
+                </ul>
+                
+                <div class="pricing-format-details">
+                    <div class="format-option">
+                        <span class="format-duration">Mensuel</span>
+                        <span class="format-price">250€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration">Trimestriel (-8%)</span>
+                        <span class="format-price">230€<small>/mois</small></span>
+                    </div>
+                    <div class="format-option">
+                        <span class="format-duration" style="color:#ff4d00;">Annuel (-16%)</span>
+                        <span class="format-price">210€<small>/mois</small></span>
+                    </div>
+                </div>
+
+                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="section stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number" data-target="1500">0</span>
+                <span class="stat-label">Athlètes Transformés</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="98">0</span>
+                <span class="stat-label">% Taux de Réussite</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="24">0</span>
+                <span class="stat-label">Heures / 24 Ouvert</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="coachs" class="section">
+        <h2 class="section-title">Les Maîtres</h2>
+        <div class="coaches-grid">
+            <div class="coach-card hover-trigger">
+                <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=600&auto=format&fit=crop" class="coach-avatar" alt="Coach 1">
+                <div class="coach-info">
+                    <span class="coach-role">Hypertrophie</span>
+                    <h3>Alex Martin</h3>
+                </div>
+            </div>
+            <div class="coach-card hover-trigger">
+                <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=600&auto=format&fit=crop" class="coach-avatar" alt="Coach 2">
+                <div class="coach-info">
+                    <span class="coach-role">Endurance</span>
+                    <h3>Sarah Lopez</h3>
+                </div>
+            </div>
+            <div class="coach-card hover-trigger">
+                <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=600&auto=format&fit=crop" class="coach-avatar" alt="Coach 3">
+                <div class="coach-info">
+                    <span class="coach-role">Performance</span>
+                    <h3>Yanis Dubois</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="contact-layout">
+            <div class="contact-info">
+                <h2 class="section-title" style="text-align: left;">Rejoignez<br>L'élite.</h2>
+                <p>Les places sont limitées. L'excellence n'attend pas.</p>
+                <div style="margin-top: 40px;">
+                    <p class="highlight">PARIS • MONACO • DUBAI</p>
+                    <p>contact@jadoresport.com</p>
+                </div>
+            </div>
+            <form class="contact-form">
+                <input type="text" placeholder="NOM COMPLET" required class="hover-trigger">
+                <input type="email" placeholder="ADRESSE EMAIL" required class="hover-trigger">
+                <textarea placeholder="VOS OBJECTIFS" class="hover-trigger"></textarea>
+                <button type="submit" class="cta-btn hover-trigger" style="width: 100%; text-align: center;">ENVOYER LA DEMANDE</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="logo" style="font-size: 1.5rem;">J'ADORE SPORT</div>
+        <p>© 2025 ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        /* --------------------------
+           LOGIQUE DU CURSOR CUSTOM
+        --------------------------- */
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const triggers = document.querySelectorAll('.hover-trigger, a, button, input, textarea');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Le point suit instantanément
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Le cercle suit avec un délai (effet fluide)
+            gsap.to(cursorOutline, {
+                x: posX,
+                y: posY,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+
+        // Agrandissement du curseur au survol
+        triggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            trigger.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        /* --------------------------
+           ANIMATIONS GSAP
+        --------------------------- */
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
+            
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Intro Hero
+            const tl = gsap.timeline();
+            tl.from(".hero h1", { y: 100, opacity: 0, duration: 1.2, ease: "power4.out" })
+              .from(".hero p", { y: 50, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.8")
+              .from(".hero .cta-btn", { scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.7)" }, "-=0.6");
+
+            // Animation des titres
+            gsap.utils.toArray('.section-title').forEach(title => {
+                gsap.from(title, {
+                    scrollTrigger: { trigger: title, start: "top 85%" },
+                    y: 60, opacity: 0, duration: 1, ease: "power3.out"
+                });
+            });
+
+            // Animation pour la section Histoire (NOUVEAU)
+            gsap.from(".histoire-text", {
+                scrollTrigger: { trigger: "#histoire", start: "top 75%" },
+                x: -50, opacity: 0, duration: 1, ease: "power3.out"
+            });
+            gsap.from(".histoire-img", {
+                scrollTrigger: { trigger: "#histoire", start: "top 75%" },
+                x: 50, opacity: 0, duration: 1, ease: "power3.out"
+            });
+            
+            // Cartes Sports
+            gsap.from(".sport-card", {
+                scrollTrigger: { trigger: ".sports-grid", start: "top 80%" },
+                y: 100, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+            });
+            
+            // Cartes Abonnements
+            gsap.from(".plan-card", {
+                scrollTrigger: { trigger: ".membership-grid", start: "top 80%" },
+                y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out"
+            });
+
+            // Compteur Stats
+            const stats = document.querySelectorAll(".stat-number");
+            stats.forEach(stat => {
+                const target = +stat.getAttribute("data-target");
+                gsap.to(stat, {
+                    innerHTML: target,
+                    scrollTrigger: { trigger: stat, start: "top 80%" },
+                    duration: 2.5,
+                    ease: "power2.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function() { this.targets()[0].innerHTML = Math.ceil(this.targets()[0].innerHTML); }
+                });
+            });
+
+            // Navbar Scrolled
+            const header = document.querySelector(".header");
+            window.addEventListener("scroll", () => {
+                header.classList.toggle("scrolled", window.scrollY > 50);
+            });
+        });
+    </script>
+</body>
+</html>
