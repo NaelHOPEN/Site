@@ -9,7 +9,7 @@
 
     <style>
         /* --------------------------
-           CONFIG GLOBALE & RESET
+            CONFIG GLOBALE & RESET
         --------------------------- */
         * {
             margin: 0;
@@ -39,7 +39,7 @@
         }
 
         /* -----------------------
-           CURSOR CUSTOM (L'effet WOW)
+            CURSOR CUSTOM (L'effet WOW)
         ------------------------ */
         .cursor-dot,
         .cursor-outline {
@@ -48,7 +48,7 @@
             left: 0;
             transform: translate(-50%, -50%);
             border-radius: 50%;
-            z-index: 9999;
+            z-index: 500;
             pointer-events: none;
         }
 
@@ -79,7 +79,7 @@
         }
 
         /* -----------------------
-           GRAIN TEXTURE (Effet Cinéma)
+            GRAIN TEXTURE (Effet Cinéma)
         ------------------------ */
         .noise-overlay {
             position: fixed;
@@ -88,13 +88,13 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 9000;
+            z-index: 1;
             opacity: 0.05;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
         /* -----------------------
-           SCROLLBAR & TYPO
+            SCROLLBAR & TYPO
         ------------------------ */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
@@ -131,7 +131,7 @@
         .highlight { color: #ff4d00; }
 
         /* -----------------------
-           HEADER
+            HEADER
         ------------------------ */
         .header {
             position: fixed;
@@ -187,7 +187,7 @@
         .nav a:hover::after { width: 100%; }
 
         /* -----------------------
-           HERO SECTION
+            HERO SECTION
         ------------------------ */
         .hero {
             height: 100vh;
@@ -237,7 +237,7 @@
         }
         
         /* -----------------------
-           NOTRE HISTOIRE (About Us/History) - NOUVEAU
+            NOTRE HISTOIRE (About Us/History)
         ------------------------ */
         .histoire-grid {
             display: grid;
@@ -281,21 +281,21 @@
                 height: 300px;
             }
         }
-        /* FIN NOUVELLE SECTION HISTOIRE */
 
         /* -----------------------
-           SECTION ABONNEMENTS (ACCÈS PRIVILÉGIÉ) - UNIFIÉ ET CORRIGÉ
+            SECTION ABONNEMENTS (ACCÈS PRIVILÉGIÉ)
         ------------------------ */
         
         .membership-grid {
             display: grid;
+            /* Auto-fit pour s'adapter à l'espace, minmax pour une taille minimale de 300px */
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
             margin-top: 50px;
         }
 
         .plan-card {
-            background: #121212; /* Assure un fond sombre et visible */
+            background: #0d0d0d; /* Fond légèrement plus clair que le body pour le contraste */
             padding: 40px 30px;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -304,7 +304,13 @@
             position: relative;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transform-style: preserve-3d;
+            
+            /* CORRECTION: Les cartes doivent être invisibles initialement pour l'animation GSAP */
+            opacity: 0; 
+            transform: translateY(50px);
         }
+        /* L'animation GSAP ciblera ces propriétés pour les rendre visibles au scroll */
+
 
         .plan-card:hover {
             transform: translateY(-10px);
@@ -415,7 +421,7 @@
         }
 
         /* -----------------------
-           MARQUEE (Texte défilant)
+            MARQUEE (Texte défilant)
         ------------------------ */
         .marquee-container {
             width: 100%;
@@ -449,7 +455,7 @@
         }
 
         /* -----------------------
-           SPORTS
+            SPORTS
         ------------------------ */
         .sports-grid {
             display: grid;
@@ -514,7 +520,7 @@
         .img-boxe { background-image: url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800&auto=format&fit=crop'); }
 
         /* -----------------------
-           STATS & COACHS
+            STATS & COACHS
         ------------------------ */
         .stats { border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; background: #080808; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
@@ -529,7 +535,7 @@
         .coach-role { color: #ff4d00; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block;}
 
         /* -----------------------
-           CONTACT & FOOTER
+            CONTACT & FOOTER
         ------------------------ */
         .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
         .contact-info h3 { font-size: 2rem; margin-bottom: 20px; }
@@ -566,7 +572,8 @@
         <div class="logo">J'ADORE <span class="highlight">SPORT</span></div>
         <nav class="nav">
             <a href="#accueil" class="hover-trigger">Accueil</a>
-            <a href="#histoire" class="hover-trigger">Notre Histoire</a> <a href="#sports" class="hover-trigger">Disciplines</a>
+            <a href="#histoire" class="hover-trigger">Notre Histoire</a> 
+            <a href="#sports" class="hover-trigger">Disciplines</a>
             <a href="#membership" class="hover-trigger">Abonnements</a>
             <a href="#coachs" class="hover-trigger">Coachs</a>
             <a href="#contact" class="hover-trigger">Contact</a>
@@ -605,6 +612,7 @@
             <div class="histoire-img hover-trigger"></div>
         </div>
     </section>
+    
     <section id="sports" class="section">
         <h2 class="section-title">Nos Disciplines</h2>
         <p class="section-subtitle">L'élégance de l'effort.</p>
@@ -633,7 +641,7 @@
         </div>
     </section>
 
-    <section id="membership" class="section" data-scroll-section>
+    <section id="membership" class="section">
         <h2 class="section-title">Accès Privilégié</h2>
         <p class="section-subtitle">Choisissez le niveau et la durée d'engagement qui correspondent à vos objectifs.</p>
         
@@ -661,10 +669,10 @@
                     </div>
                 </div>
 
-                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+                <a href="#contact" class="cta-btn hover-trigger" style="width:100%;">Sélectionner le Forfait</a>
             </div>
             
-            <div class="plan-card" style="border-color: #ff4d00; background: #181818;">
+            <div class="plan-card" style="border-color: #ff4d00;"> 
                 <div class="plan-name" style="color:#ff4d00;">Elite</div>
                 <ul class="plan-features">
                     <li>1 Coaching privé / mois inclus</li>
@@ -686,7 +694,7 @@
                     </div>
                 </div>
 
-                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+                <a href="#contact" class="cta-btn hover-trigger" style="width:100%;">Sélectionner le Forfait</a>
             </div>
             
             <div class="plan-card">
@@ -711,7 +719,7 @@
                     </div>
                 </div>
 
-                <a href="#contact" class="cta-btn" style="width:100%;">Sélectionner le Forfait</a>
+                <a href="#contact" class="cta-btn hover-trigger" style="width:100%;">Sélectionner le Forfait</a>
             </div>
             
         </div>
@@ -790,27 +798,31 @@
     
     <script>
         /* --------------------------
-           LOGIQUE DU CURSOR CUSTOM
+            LOGIQUE DU CURSOR CUSTOM
         --------------------------- */
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
+        // Ajout d'une gestion des erreurs si le curseur n'existe pas (pour la robustesse)
         const triggers = document.querySelectorAll('.hover-trigger, a, button, input, textarea');
 
         window.addEventListener('mousemove', (e) => {
             const posX = e.clientX;
             const posY = e.clientY;
 
-            // Le point suit instantanément
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
+            // Protection pour les petits écrans (où les curseurs sont masqués)
+            if (cursorDot && cursorOutline) {
+                // Le point suit instantanément
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
 
-            // Le cercle suit avec un délai (effet fluide)
-            gsap.to(cursorOutline, {
-                x: posX,
-                y: posY,
-                duration: 0.5,
-                ease: "power2.out"
-            });
+                // Le cercle suit avec un délai (effet fluide)
+                gsap.to(cursorOutline, {
+                    x: posX,
+                    y: posY,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            }
         });
 
         // Agrandissement du curseur au survol
@@ -820,12 +832,23 @@
         });
 
         /* --------------------------
-           ANIMATIONS GSAP
+            ANIMATIONS GSAP
         --------------------------- */
         window.addEventListener("load", () => {
             document.body.classList.add("loaded");
             
             gsap.registerPlugin(ScrollTrigger);
+
+            // Logic pour l'en-tête (Header Scroll)
+            const header = document.querySelector('.header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
 
             // Intro Hero
             const tl = gsap.timeline();
@@ -841,7 +864,7 @@
                 });
             });
 
-            // Animation pour la section Histoire (NOUVEAU)
+            // Animation pour la section Histoire
             gsap.from(".histoire-text", {
                 scrollTrigger: { trigger: "#histoire", start: "top 75%" },
                 x: -50, opacity: 0, duration: 1, ease: "power3.out"
@@ -857,31 +880,43 @@
                 y: 100, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
             });
             
-            // Cartes Abonnements
-            gsap.from(".plan-card", {
-                scrollTrigger: { trigger: ".membership-grid", start: "top 80%" },
-                y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out"
+            // Cartes Abonnements (LA SECTION QUI CAUSAIT PROBABLEMENT PROBLÈME)
+            // Grâce au CSS mis à jour (`.plan-card { opacity: 0; transform: translateY(50px); }`), 
+            // l'animation ci-dessous est nécessaire pour les rendre visibles.
+            gsap.to(".plan-card", {
+                scrollTrigger: { trigger: "#membership", start: "top 80%" },
+                y: 0, 
+                opacity: 1, 
+                duration: 0.8, 
+                stagger: 0.2, 
+                ease: "power3.out"
             });
 
-            // Compteur Stats
-            const stats = document.querySelectorAll(".stat-number");
+            // Cartes Coachs
+            gsap.from(".coach-card", {
+                scrollTrigger: { trigger: ".coaches-grid", start: "top 80%" },
+                y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+            });
+            
+            // Compteur Stats (CODE JS MANQUANT COMPLÉTÉ)
+            const stats = document.querySelectorAll('.stat-number');
+
             stats.forEach(stat => {
-                const target = +stat.getAttribute("data-target");
+                const target = parseInt(stat.getAttribute('data-target'));
+                
+                // On anime le innerText pour faire un effet de comptage
                 gsap.to(stat, {
-                    innerHTML: target,
-                    scrollTrigger: { trigger: stat, start: "top 80%" },
-                    duration: 2.5,
-                    ease: "power2.out",
-                    snap: { innerHTML: 1 },
-                    onUpdate: function() { this.targets()[0].innerHTML = Math.ceil(this.targets()[0].innerHTML); }
+                    innerText: target,
+                    duration: 2,
+                    snap: "innerText", // Assure que les nombres sont entiers
+                    ease: "power1.out",
+                    scrollTrigger: {
+                        trigger: ".stats-grid",
+                        start: "top 85%"
+                    }
                 });
             });
 
-            // Navbar Scrolled
-            const header = document.querySelector(".header");
-            window.addEventListener("scroll", () => {
-                header.classList.toggle("scrolled", window.scrollY > 50);
-            });
         });
     </script>
 </body>
